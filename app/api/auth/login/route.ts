@@ -1,0 +1,2 @@
+import { NextResponse } from 'next/server'; import { setSession } from '../../../../lib/auth';
+export async function POST(r:Request){const f=await r.formData();if(f.get('username')!==process.env.ADMIN_USER||f.get('password')!==process.env.ADMIN_PASSWORD)return NextResponse.redirect(new URL('/login',r.url),303);await setSession(String(f.get('username')));return NextResponse.redirect(new URL('/',r.url),303)}
