@@ -1,41 +1,8 @@
 'use client';
-import Link from 'next/link';
-import {usePathname} from 'next/navigation';
-import {Activity, Gauge, Users, Server, Wifi, FileText, LogOut, Settings, UserRoundCog, Menu, X} from 'lucide-react';
-import {useState} from 'react';
-
-const items=[
-  ['/', 'Dashboard', Gauge],
-  ['/users','Usuários',Users],
-  ['/profiles','Perfis / Grupos',UserRoundCog],
-  ['/sites','Sites / NAS',Server],
-  ['/sessions','Sessões',Wifi],
-  ['/logs','Logs',FileText],
-] as const;
-
-export function Logo({compact=false}:{compact?:boolean}){
-  const [failed,setFailed]=useState(false);
-  return <div className={`logo-wrap ${compact?'compact':''}`}>
-    {!failed && <img src="/c3-logo.png" alt="C3 Support" className="brand-logo" onError={()=>setFailed(true)}/>}
-    {failed && <div className="logo-fallback"><b>C3</b><span>SUPPORT</span></div>}
-    {!compact && <div className="brand-copy"><strong>C3 RADIUS</strong><span>Gerenciamento FreeRADIUS</span></div>}
-  </div>
-}
-
-export function Shell({children,title,subtitle}:{children:React.ReactNode,title:string,subtitle?:string}){
-  const path=usePathname(); const [open,setOpen]=useState(false);
-  return <div className="shell">
-    <aside className={`side ${open?'open':''}`}>
-      <div className="side-head"><Logo/><button className="icon-btn mobile-only" onClick={()=>setOpen(false)} aria-label="Fechar menu"><X size={20}/></button></div>
-      <nav className="nav">{items.map(([href,label,Icon])=><Link key={href} href={href} className={path===href?'active':''} onClick={()=>setOpen(false)}><Icon size={19}/><span>{label}</span></Link>)}</nav>
-      <div className="side-bottom"><div className="radius-status"><span className="status-dot"/><div><b>FreeRADIUS</b><small>Backend conectado</small></div></div><div className="version">C3 RADIUS v2.0 • Suporte que conecta</div></div>
-    </aside>
-    {open&&<button className="overlay" onClick={()=>setOpen(false)} aria-label="Fechar menu"/>}
-    <main className="main">
-      <header className="topbar"><button className="icon-btn mobile-only" onClick={()=>setOpen(true)} aria-label="Abrir menu"><Menu size={21}/></button><div className="page-title"><h1>{title}</h1><p>{subtitle||'Gerenciamento de acessos • FreeRADIUS'}</p></div><div className="top-actions"><div className="admin-pill"><span className="avatar">C3</span><div><b>Administrador</b><small>C3 Support</small></div></div><form action="/api/auth/logout" method="post"><button className="icon-btn" title="Sair"><LogOut size={19}/></button></form></div></header>
-      <div className="content">{children}</div>
-    </main>
-  </div>
-}
-
+import Link from'next/link';import{usePathname}from'next/navigation';import{Activity,Gauge,Users,Server,Wifi,FileText,LogOut,UserRoundCog,Menu,X,Sparkles,ChevronRight}from'lucide-react';import{useState}from'react';
+const items=[['/','Visão geral',Gauge],['/users','Usuários',Users],['/profiles','Perfis / Grupos',UserRoundCog],['/sites','Sites / NAS',Server],['/sessions','Sessões',Wifi],['/logs','Auditoria',FileText]]as const;
+export function Logo({compact=false}:{compact?:boolean}){const[f,setF]=useState(false);return <div className={`logo-wrap ${compact?'compact':''}`}>{!f&&<img src="/c3-logo.png" alt="C3 Support" className="brand-logo" onError={()=>setF(true)}/>} {f&&<div className="logo-fallback"><b>C3</b><span>SUPPORT</span></div>}{!compact&&<div className="brand-copy"><strong>C3 RADIUS</strong><span>Access Cloud</span></div>}</div>}
+export function Shell({children,title,subtitle}:{children:React.ReactNode,title:string,subtitle?:string}){const path=usePathname(),[open,setOpen]=useState(false);return <div className="shell"><aside className={`side ${open?'open':''}`}><div className="side-head"><Logo/><button className="icon-btn mobile-only" onClick={()=>setOpen(false)}><X size={20}/></button></div><div className="workspace"><span className="workspace-icon">C3</span><div><small>Workspace</small><b>C3 Support</b></div><ChevronRight size={16}/></div><nav className="nav"><span className="nav-label">GERENCIAMENTO</span>{items.map(([href,label,Icon])=><Link key={href} href={href} className={path===href?'active':''} onClick={()=>setOpen(false)}><Icon size={19}/><span>{label}</span></Link>)}</nav><div className="side-bottom"><div className="radius-status"><span className="status-dot"/><div><b>FreeRADIUS conectado</b><small>Banco sincronizado</small></div></div><div className="version">C3 RADIUS • Suporte que conecta</div></div></aside>{open&&<button className="overlay" onClick={()=>setOpen(false)}/>}<main className="main"><header className="topbar"><button className="icon-btn mobile-only" onClick={()=>setOpen(true)}><Menu size={21}/></button><div className="page-title"><span className="eyebrow">C3 RADIUS</span><h1>{title}</h1><p>{subtitle||'Gerenciamento de acessos FreeRADIUS'}</p></div><div className="top-actions"><div className="admin-pill"><span className="avatar">YN</span><div><b>Administrador</b><small>C3 Support</small></div></div><form action="/api/auth/logout" method="post"><button className="icon-btn" title="Sair"><LogOut size={18}/></button></form></div></header><div className="content">{children}</div></main></div>}
 export function Empty({text='Nenhum registro encontrado.'}:{text?:string}){return <div className="empty"><Activity size={20}/>{text}</div>}
+export function PageIntro({title,text,action}:{title:string,text:string,action?:React.ReactNode}){return <div className="hero"><div><span className="kicker"><Sparkles size={13}/>C3 Control Center</span><h2>{title}</h2><p>{text}</p></div>{action}</div>}
+export function ConfirmButton({label='Excluir'}:{label?:string}){return <button className="btn danger" type="submit" onClick={e=>{if(!confirm('Tem certeza? Esta ação não pode ser desfeita.'))e.preventDefault()}}>{label}</button>}

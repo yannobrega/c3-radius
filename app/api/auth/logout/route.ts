@@ -1,1 +1,1 @@
-import {NextResponse} from 'next/server';import{clearSession}from'../../../../lib/auth';export async function POST(r:Request){await clearSession();return NextResponse.redirect(new URL('/login',r.url),303)}
+import{clearSession}from'../../../../lib/auth';import{seeOther}from'../../../../lib/http';export async function POST(){await clearSession();return seeOther('/login')}
