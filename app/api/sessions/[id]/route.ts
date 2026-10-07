@@ -1,0 +1,2 @@
+import{q}from'../../../../lib/db';import{seeOther}from'../../../../lib/http';
+export async function POST(r:Request,{params}:{params:Promise<{id:string}>}){const{id}=await params;const f=await r.formData();const action=String(f.get('_action')||'');if(action!=='close')return new Response('Ação inválida',{status:400});await q(`UPDATE radacct SET acctstoptime=NOW(),acctterminatecause='Admin-Reset' WHERE radacctid=? AND acctstoptime IS NULL`,[id]);return seeOther('/sessions?closed=1')}

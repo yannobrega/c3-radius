@@ -10,3 +10,10 @@ Painel SaaS para administração de FreeRADIUS + MariaDB, compatível com o sche
 
 ## Environment
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_USER`, `ADMIN_PASSWORD`, `AUTH_SECRET`.
+
+## V5 — sessões reais
+- Dashboard e Sessões contam como online apenas registros sem `Acct-Stop` com `acctupdatetime`/`acctstarttime` recente.
+- Janela padrão: 15 minutos; altere com `SESSION_FRESH_MINUTES=15`.
+- Sessões stale continuam visíveis para auditoria, mas não contam como online.
+- O nome amigável do NAS é resolvido pela tabela `nas`; localhost aparece como "Teste local".
+- "Encerrar registro" preenche `acctstoptime` e `acctterminatecause=Admin-Reset`. Não envia CoA/Disconnect ao NAS.
