@@ -13,7 +13,7 @@ Painel Next.js para administração do FreeRADIUS / MariaDB.
 
 Configure `SESSION_FRESH_MINUTES=15` (ou outro valor >=5). Com Interim-Update de 300s no UniFi, 15 min é uma margem segura.
 
-## V7
+## V8
 - Session IP is consolidated field-by-field; loopback IPs are never preferred over a real Framed-IP-Address.
 - `/history` provides session audit filters for user, date, IP, MAC and NAS.
 - `/logs` adds Access-Reject diagnostics. `radpostauth` does not store FreeRADIUS textual reject causes by default, so the UI explicitly labels confirmed DB-state causes vs probable diagnostics.

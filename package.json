@@ -12,7 +12,8 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "mysql2": "latest"
+    "mysql2": "latest",
+    "xlsx": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
