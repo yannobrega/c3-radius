@@ -19,3 +19,11 @@ Configure `SESSION_FRESH_MINUTES=15` (ou outro valor >=5). Com Interim-Update de
 - `/logs` adds Access-Reject diagnostics. `radpostauth` does not store FreeRADIUS textual reject causes by default, so the UI explicitly labels confirmed DB-state causes vs probable diagnostics.
 - Sessions expose Disconnect-Request (CoA/DM) using `radclient`. Configure UniFi Dynamic Authorization and UDP 3799. Optional `COA_PORT=3799`.
 - CoA uses the NAS shared secret already stored in the `nas` table; never expose it in UI/logs.
+
+## V8.1 — Sites mais ativos
+
+O card **Sites mais ativos · 24h** agora considera somente NAS existentes na tabela `nas`.
+A consulta usa `INNER JOIN nas` por `nas.nasname = radacct.nasipaddress`,
+agrupa por ID de NAS e apresenta `shortname` (com fallback para `nasname`).
+IPs de origem que não estão cadastrados, como `10.0.5.1`, não aparecem no ranking.
+Não altera registros de accounting ou regras de autenticação.
