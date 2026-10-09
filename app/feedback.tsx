@@ -14,19 +14,6 @@ export default function FeedbackCenter(){
  const router=useRouter();const [notice,setNotice]=useState<Notice|null>(null),[toast,setToast]=useState<Notice|null>(null),[pending,setPending]=useState<Pending|null>(null),[busy,setBusy]=useState(false);
  const state=useRef({busy:false});
  useEffect(()=>{if(!toast)return;const t=setTimeout(()=>setToast(null),5000);return()=>clearTimeout(t)},[toast]);
- useEffect(()=>{const onSubmit=(event:SubmitEvent)=>{
-  const form=event.target as HTMLFormElement;
-  if(!(form instanceof HTMLFormElement)||form.dataset.nativeSubmit==='true')return;
-  const url=new URL(form.action,window.location.href);
-  if(!url.pathname.startsWith('/api/')||url.pathname.startsWith('/api/auth/'))return;
-  event.preventDefault();if(state.current.busy)return;
-  const submitter=event.submitter as HTMLElement|null;
-  const action=getAction(form,submitter);
-  if(destructive(action)){
-   setPending({form,submitter,action,label:(submitter?.textContent||'Confirmar ação').trim()});return;
-  }
-  void execute(form,submitter,action);
- };
  const execute=async(form:HTMLFormElement,submitter:HTMLElement|null,action:string)=>{
   state.current.busy=true;setBusy(true);
   try{
@@ -47,6 +34,19 @@ export default function FeedbackCenter(){
    router.refresh();
   }catch(e){setNotice({kind:'error',title:'Falha de comunicação',message:e instanceof Error?e.message:'Não foi possível contactar o servidor.'})}
   finally{state.current.busy=false;setBusy(false);setPending(null)}
+ };
+ useEffect(()=>{const onSubmit=(event:SubmitEvent)=>{
+  const form=event.target as HTMLFormElement;
+  if(!(form instanceof HTMLFormElement)||form.dataset.nativeSubmit==='true')return;
+  const url=new URL(form.action,window.location.href);
+  if(!url.pathname.startsWith('/api/')||url.pathname.startsWith('/api/auth/'))return;
+  event.preventDefault();if(state.current.busy)return;
+  const submitter=event.submitter as HTMLElement|null;
+  const action=getAction(form,submitter);
+  if(destructive(action)){
+   setPending({form,submitter,action,label:(submitter?.textContent||'Confirmar ação').trim()});return;
+  }
+  void execute(form,submitter,action);
  };
  document.addEventListener('submit',onSubmit,true);return()=>document.removeEventListener('submit',onSubmit,true);
  },[router]);
